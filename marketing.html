@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chara — 방송 편집점, 이제 AI가 찾아드립니다</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #f8f7ff;
+        --surface: #ffffff;
+        --surface2: #f0eeff;
+        --accent: #7c3aed;
+        --accent2: #6d28d9;
+        --text: #1a1625;
+        --muted: #6b6b80;
+        --border: #e2dff5;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+        line-height: 1.6;
+      }
+
+      /* ── NAV ── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 48px;
+        background: rgba(248, 247, 255, 0.88);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
+      .logo {
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+      .logo span {
+        color: var(--accent2);
+      }
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+      }
+      nav a:hover {
+        color: var(--text);
+      }
+      .nav-links {
+        display: flex;
+        gap: 32px;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 120px 24px 80px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 800px;
+        height: 800px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.15) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(124, 58, 237, 0.4);
+        color: var(--accent2);
+        padding: 6px 16px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+        letter-spacing: 0.3px;
+      }
+      .hero h1 {
+        font-size: clamp(2.4rem, 6vw, 4.2rem);
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -1.5px;
+        margin-bottom: 24px;
+      }
+      .hero h1 em {
+        font-style: normal;
+        background: linear-gradient(135deg, #a855f7, #7c3aed);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .hero p {
+        font-size: 1.15rem;
+        color: var(--muted);
+        max-width: 560px;
+        margin: 0 auto 40px;
+      }
+      .hero-cta {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        color: #fff;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition:
+          opacity 0.2s,
+          transform 0.15s;
+      }
+      .btn-primary:hover {
+        opacity: 0.88;
+        transform: translateY(-1px);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+        padding: 14px 32px;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition:
+          border-color 0.2s,
+          transform 0.15s;
+      }
+      .btn-outline:hover {
+        border-color: var(--accent2);
+        transform: translateY(-1px);
+      }
+
+      .platforms {
+        margin-top: 64px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .platforms span {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      .platform-badge {
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+      .chzzk {
+        background: rgba(0, 200, 100, 0.12);
+        color: #00c864;
+        border: 1px solid rgba(0, 200, 100, 0.3);
+      }
+      .soop {
+        background: rgba(66, 133, 244, 0.12);
+        color: #4285f4;
+        border: 1px solid rgba(66, 133, 244, 0.3);
+      }
+      .yt {
+        background: rgba(255, 0, 0, 0.12);
+        color: #ff4444;
+        border: 1px solid rgba(255, 0, 0, 0.3);
+      }
+
+      /* ── SECTION ── */
+      section {
+        padding: 100px 24px;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--accent2);
+        margin-bottom: 12px;
+      }
+      .section-title {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 16px;
+      }
+      .section-sub {
+        color: var(--muted);
+        font-size: 1.05rem;
+        max-width: 520px;
+      }
+
+      /* ── PROBLEM ── */
+      .problem {
+        background: var(--surface);
+      }
+      .pain-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+        margin-top: 56px;
+      }
+      .pain-card {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 28px;
+      }
+      .pain-icon {
+        font-size: 2rem;
+        margin-bottom: 14px;
+      }
+      .pain-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .pain-card p {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      /* ── HOW IT WORKS ── */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 64px;
+        position: relative;
+      }
+      .steps::before {
+        content: '';
+        position: absolute;
+        left: 27px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, var(--accent), transparent);
+      }
+      .step {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+        padding: 32px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .step:last-child {
+        border-bottom: none;
+      }
+      .step-num {
+        width: 56px;
+        height: 56px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.1rem;
+        position: relative;
+        z-index: 1;
+      }
+      .step-body h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .step-body p {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .step-tag {
+        display: inline-block;
+        margin-top: 10px;
+        background: rgba(124, 58, 237, 0.15);
+        color: var(--accent2);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      /* ── FEATURES ── */
+      .features-bg {
+        background: var(--surface);
+      }
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 56px;
+      }
+      .feat-card {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+      .feat-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-3px);
+      }
+      .feat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(
+          135deg,
+          rgba(124, 58, 237, 0.3),
+          rgba(168, 85, 247, 0.2)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+      }
+      .feat-card h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .feat-card p {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.7;
+      }
+
+      /* ── AI CHAT ── */
+      .chat-demo {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 28px;
+        max-width: 600px;
+        margin: 56px auto 0;
+      }
+      .chat-demo .demo-title {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4ade80;
+      }
+      .msg {
+        margin-bottom: 16px;
+        display: flex;
+        gap: 10px;
+      }
+      .msg.user {
+        justify-content: flex-end;
+      }
+      .bubble {
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        max-width: 80%;
+      }
+      .bubble.user-b {
+        background: var(--accent);
+        color: #fff;
+        border-radius: 12px 12px 2px 12px;
+      }
+      .bubble.ai-b {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px 12px 12px 2px;
+      }
+      .bubble.ai-b strong {
+        color: var(--accent2);
+      }
+
+      /* ── SCREENSHOTS ── */
+      .screenshots {
+        background: var(--surface);
+      }
+      .shot-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 20px;
+        margin-top: 56px;
+        align-items: start;
+      }
+      .shot-card {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: 0 8px 32px rgba(124, 58, 237, 0.08);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .shot-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(124, 58, 237, 0.14);
+      }
+      .shot-card img {
+        width: 100%;
+        display: block;
+      }
+      .shot-label {
+        padding: 14px 18px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--muted);
+        background: var(--surface2);
+        border-top: 1px solid var(--border);
+      }
+      @media (max-width: 768px) {
+        .shot-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 40px 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      footer p {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: 640px) {
+        nav {
+          padding: 14px 20px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .hero h1 {
+          letter-spacing: -0.5px;
+        }
+        footer {
+          padding: 32px 20px;
+          justify-content: center;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <div class="logo">Chara</div>
+      <div class="nav-links">
+        <a href="#how">작동 방식</a>
+        <a href="#features">기능</a>
+        <a href="#chat">AI 대화</a>
+      </div>
+      <a
+        href="#contact"
+        class="btn-primary"
+        style="padding: 10px 22px; font-size: 0.9rem"
+        >문의하기</a
+      >
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="badge">✦ AI 기반 편집점 자동 추출</div>
+      <h1>
+        8시간 이상의 긴 방송 편집<br /><em>AI와 함께 해보는건 어떠세요?</em>
+      </h1>
+      <p>
+        채팅 반응, 음성 분위기, AI 분석을 한번에<br />AI와 함께 편집을
+        진행해보세요.
+      </p>
+      <div class="hero-cta">
+        <a href="#how" class="btn-primary">어떻게 작동하나요?</a>
+        <a href="#contact" class="btn-outline">문의하기</a>
+      </div>
+      <div class="platforms">
+        <span>지원 플랫폼</span>
+        <span class="platform-badge chzzk">
+          <img
+            src="https://chzzk.naver.com/favicon.ico"
+            width="14"
+            height="14"
+            style="
+              vertical-align: middle;
+              margin-right: 5px;
+              border-radius: 3px;
+            "
+            alt=""
+          />치지직
+        </span>
+        <span class="platform-badge soop">
+          <img
+            src="https://www.sooplive.co.kr/favicon.ico"
+            width="14"
+            height="14"
+            style="
+              vertical-align: middle;
+              margin-right: 5px;
+              border-radius: 3px;
+            "
+            alt=""
+          />숲 SOOP
+        </span>
+        <span class="platform-badge yt">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="#ff4444"
+            style="vertical-align: middle; margin-right: 5px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"
+            /></svg
+          >YouTube(예정)
+        </span>
+      </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="problem">
+      <div class="container">
+        <p class="section-label">Problem</p>
+        <h2 class="section-title">편집자의 하루,<br />이런 고민 없으신가요?</h2>
+        <div class="pain-grid">
+          <div class="pain-card">
+            <div class="pain-icon">⏱️</div>
+            <h3>8시간 방송을 처음부터 다 본다</h3>
+            <p>
+              하이라이트 찾으려고 전체를 다 돌려보는 데 시간을 쓰고 있지
+              않으신가요?
+            </p>
+          </div>
+          <div class="pain-card">
+            <div class="pain-icon">🤔</div>
+            <h3>"이 구간이 재밌었나?" 기억이 안 난다</h3>
+            <p>
+              방송 중 채팅이 폭발했던 순간을 나중에 다시 찾으려면 막막합니다.
+            </p>
+          </div>
+          <div class="pain-card">
+            <div class="pain-icon">😮‍💨</div>
+            <h3>내가 원하는 편집 부분을 찾고 싶다</h3>
+            <p>
+              어떤 장면이 어디 있는지 일일이 타임스탬프를 찾아야 해서 편집
+              자체보다 탐색에 더 시간이 걸립니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how">
+      <div class="container">
+        <p class="section-label">How it works</p>
+        <h2 class="section-title">URL과 MP3면 충분합니다</h2>
+        <p class="section-sub">
+          방송 URL과 오디오 파일만 넣으면, 나머지는 AI가 알아서 합니다.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h3>방송 URL 입력 & 채팅 수집</h3>
+              <p>
+                치지직, 숲, 유튜브 VOD 주소를 입력하면 전체 채팅 데이터를
+                자동으로 수집합니다.
+              </p>
+              <span class="step-tag">CHZZK · SOOP · YouTube 지원</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h3>채팅 반응 + 음성 분석 동시 실행</h3>
+              <p>
+                ㅋㅋ·대박 같은 반응 집중 구간과 오디오 RMS가 높은 구간을 동시에
+                분석합니다. 발화 내용도 STT로 텍스트화합니다.
+              </p>
+              <span class="step-tag">AI 분석 · STT 자막</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h3>Gemini AI가 각 구간 요약</h3>
+              <p>
+                하이라이트 구간마다 무슨 내용이었는지, 분위기는 어땠는지
+                자동으로 정리해드립니다.
+              </p>
+              <span class="step-tag">Gemini · 구간별 토픽/무드</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <h3>AI에게 방송 내용을 물어보세요</h3>
+              <p>
+                "오늘 제일 웃겼던 장면이 뭐야?", "게임 결과가 어떻게 됐어?"
+                자연어로 물어보면 답해드립니다.
+              </p>
+              <span class="step-tag">AI 대화봇 · 방송 Q&A</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-bg" id="features">
+      <div class="container">
+        <p class="section-label">Features</p>
+        <h2 class="section-title">편집자에게 필요한 것만</h2>
+        <div class="feat-grid">
+          <div class="feat-card">
+            <div class="feat-icon">🤖</div>
+            <h3>AI 방송 요약봇</h3>
+            <p>
+              분석 완료 후 채팅으로 방송 내용을 물어볼 수 있습니다. 어떤 구간이
+              재밌었는지, 어떤 이슈가 있었는지 바로 알 수 있습니다.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">💬</div>
+            <h3>채팅 반응 기반 하이라이트</h3>
+            <p>
+              시청자 채팅이 폭발한 구간을 1분 단위로 분석합니다. ㅋㅋ, 대박,
+              미쳤다 등 반응 키워드를 기준으로 상위 구간을 추립니다.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">🔊</div>
+            <h3>오디오 하이라이트</h3>
+            <p>
+              방송자의 목소리가 가장 크고 격해졌던 구간을 ffmpeg RMS 분석으로
+              자동 감지합니다.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">📊</div>
+            <h3>채팅 타임라인 시각화</h3>
+            <p>
+              방송 전체의 채팅 흐름을 그래프로 한눈에 봅니다. 어디서 반응이
+              폭발했는지 시각적으로 바로 확인됩니다.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">⚡</div>
+            <h3>3개 플랫폼 동시 지원</h3>
+            <p>
+              치지직, 숲(아프리카TV), 유튜브 모두 동일한 인터페이스로
+              분석합니다. 플랫폼 상관없이 같은 방식으로 사용하세요.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREENSHOTS -->
+    <section class="screenshots">
+      <div class="container">
+        <p class="section-label">실제 화면</p>
+        <h2 class="section-title">
+          직접 만든 도구,<br />실제로 이렇게 생겼습니다
+        </h2>
+        <div class="shot-grid">
+          <div class="shot-card">
+            <img src="screenshot1.png" alt="파이프라인 진행 화면" />
+            <div class="shot-label">🔄 AI 분석 파이프라인 진행 상황</div>
+          </div>
+          <div class="shot-card">
+            <img src="screenshot2.png" alt="전체 대시보드" />
+            <div class="shot-label">
+              🖥️ 방송 분석 대시보드 — 영상 · 채팅 타임라인 · AI 요약봇
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI CHAT DEMO -->
+    <section id="chat">
+      <div class="container" style="text-align: center">
+        <p class="section-label">AI 대화봇</p>
+        <h2 class="section-title">방송 내용을 AI에게<br />그냥 물어보세요</h2>
+        <p class="section-sub" style="margin: 0 auto">
+          6시간 방송을 다 보지 않아도 됩니다.<br />궁금한 걸 물어보면 AI가
+          답해드립니다.
+        </p>
+
+        <div class="chat-demo">
+          <div class="demo-title">
+            <span class="dot"></span> AI 방송 요약봇 · 라이브
+          </div>
+
+          <div class="msg user">
+            <div class="bubble user-b">
+              오늘 방송에서 제일 웃겼던 구간이 언제야?
+            </div>
+          </div>
+          <div class="msg">
+            <div class="bubble ai-b">
+              <strong>01:23 ~ 01:45</strong> 구간에서 채팅 반응이 가장
+              폭발했습니다.<br />
+              시청자들의 ㅋㅋ 반응이 집중됐고, 방송자 발화 기준으로 게임 중
+              예상치 못한 실수가 있었던 구간입니다.
+            </div>
+          </div>
+          <div class="msg user">
+            <div class="bubble user-b">썸네일 뽑을 만한 장면 추천해줘</div>
+          </div>
+          <div class="msg">
+            <div class="bubble ai-b">
+              <strong>02:47</strong> — 채팅 폭발 + 방송자 리액션이 겹친 구간으로
+              임팩트가 강합니다.<br />
+              <strong>04:12</strong> — 감정선이 올라가며 분위기가 반전되는
+              시점입니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section
+      style="background: var(--surface); text-align: center"
+      id="contact"
+    >
+      <div class="container">
+        <h2 class="section-title">AI와 함께 편집을 진행해보세요</h2>
+        <p style="color: var(--muted); margin-bottom: 40px; font-size: 1.05rem">
+          도입 문의 또는 데모 요청은 아래로 연락해 주세요.
+        </p>
+        <a
+          href="mailto:chara.kr.official@gmail.com"
+          class="btn-primary"
+          style="font-size: 1.05rem; padding: 16px 40px"
+        >
+          Chara.kr.official@gmail.com →
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="logo">Chara</div>
+      <p>치지직 · 숲 SOOP · YouTube 방송 하이라이트 자동 분석</p>
+    </footer>
+  </body>
+</html>
