@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
     <title>Chara — 방송 편집점, 이제 AI가 찾아드립니다</title>
     <!-- 폰트 로드 -->
     <link
@@ -36,6 +37,10 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        html { background: #ffffff; color: #0f172a; }
       }
 
       body {
