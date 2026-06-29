@@ -98,6 +98,19 @@
         font-size: 0.95rem;
         font-weight: 500;
         transition: color 0.2s;
+        white-space: nowrap;
+      }
+
+      @media (max-width: 480px) {
+        .nav-links {
+          gap: 0.6rem;
+        }
+        .nav-links a {
+          font-size: 0.78rem;
+        }
+        .logo {
+          font-size: 1.1rem;
+        }
       }
 
       .menu-toggle {
@@ -1498,7 +1511,7 @@
       <a href="index.html" class="logo">Chara</a>
       <div class="nav-links">
         <a href="index.html" class="active">데스크톱 앱</a>
-        <a href="premiere-extension.html">확장프로그램</a>
+        <a href="premiere-extension.html">프리미어프로 확장프로그램</a>
       </div>
       <button class="menu-toggle" onclick="toggleMenu()">
         <span></span><span></span><span></span>
