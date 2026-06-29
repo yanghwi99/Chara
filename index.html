@@ -40,7 +40,10 @@
       }
 
       @media (prefers-color-scheme: dark) {
-        html { background: #ffffff; color: #0f172a; }
+        html {
+          background: #ffffff;
+          color: #0f172a;
+        }
       }
 
       body {
@@ -85,7 +88,8 @@
 
       .nav-links {
         display: flex;
-        gap: 2rem;
+        gap: 1.5rem;
+        align-items: center;
       }
 
       .nav-links a {
@@ -96,8 +100,78 @@
         transition: color 0.2s;
       }
 
+      .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        position: relative;
+        z-index: 1001;
+      }
+      .menu-toggle span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--text-main);
+        margin: 5px 0;
+        border-radius: 2px;
+        transition:
+          transform 0.3s,
+          opacity 0.3s;
+      }
+      .menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+      }
+      .menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 5%;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 999;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+      .mobile-menu.active {
+        display: flex;
+      }
+      .mobile-menu a {
+        text-decoration: none;
+        color: var(--text-muted);
+        font-size: 1rem;
+        font-weight: 500;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border-color);
+        transition: color 0.2s;
+      }
+      .mobile-menu a:last-child {
+        border-bottom: none;
+      }
+      .mobile-menu a:hover,
+      .mobile-menu a.active {
+        color: var(--primary);
+      }
+
       .nav-links a:hover {
         color: var(--primary);
+      }
+
+      .nav-links a.active {
+        color: var(--primary);
+        font-weight: 700;
       }
 
       .nav-cta {
@@ -226,7 +300,12 @@
         margin: 0 auto;
         border-radius: 28px;
         border: 1px solid #bae6fd;
-        background: linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 60%, #ffffff 100%);
+        background: linear-gradient(
+          180deg,
+          #e0f2fe 0%,
+          #f0f9ff 60%,
+          #ffffff 100%
+        );
         overflow: hidden;
         box-shadow: 0 8px 40px rgba(14, 165, 233, 0.1);
       }
@@ -273,7 +352,6 @@
           border-bottom: none;
         }
       }
-
 
       /* ── Steps Section ── */
       .steps {
@@ -506,7 +584,7 @@
         width: 30px;
         height: 30px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.25);
+        background: rgba(255, 255, 255, 0.25);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -530,7 +608,7 @@
 
       .chat-header-status {
         font-size: 0.7rem;
-        color: rgba(255,255,255,0.75);
+        color: rgba(255, 255, 255, 0.75);
         display: flex;
         align-items: center;
         gap: 0.3rem;
@@ -592,7 +670,7 @@
 
       .chat-bubble .highlight {
         display: inline-block;
-        background: rgba(37,99,235,0.1);
+        background: rgba(37, 99, 235, 0.1);
         color: var(--primary);
         border-radius: 6px;
         padding: 0.1rem 0.4rem;
@@ -641,12 +719,23 @@
         opacity: 0.4;
       }
 
-      .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
-      .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+      .chat-typing span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .chat-typing span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
 
       @keyframes typing-dot {
-        0%, 100% { opacity: 0.4; transform: translateY(0); }
-        50% { opacity: 1; transform: translateY(-3px); }
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: translateY(0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-3px);
+        }
       }
 
       .chat-input-bar {
@@ -1038,6 +1127,37 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
       }
 
+      .btn-outline-white {
+        display: inline-block;
+        background: transparent;
+        color: #fff;
+        padding: 0.875rem 2.25rem;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        position: relative;
+        z-index: 1;
+        transition:
+          transform 0.2s,
+          border-color 0.2s;
+      }
+
+      .btn-outline-white:hover {
+        transform: translateY(-2px);
+        border-color: #fff;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+      }
+
       /* ── FAQ ── */
       .faq {
         padding: 6rem 5%;
@@ -1295,9 +1415,6 @@
         .hero {
           padding: 100px 5% 60px;
         }
-        .nav-links {
-          display: none;
-        }
         .cta-group {
           flex-direction: column;
           align-items: stretch;
@@ -1339,24 +1456,74 @@
         }
       }
     </style>
+    <!-- Meta Pixel Code -->
+    <script>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod
+            ? n.callMethod.apply(n, arguments)
+            : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(
+        window,
+        document,
+        'script',
+        'https://connect.facebook.net/en_US/fbevents.js',
+      );
+      fbq('init', '1539584674459653');
+      fbq('track', 'PageView');
+    </script>
+    <noscript
+      ><img
+        height="1"
+        width="1"
+        style="display: none"
+        src="https://www.facebook.com/tr?id=1539584674459653&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
   </head>
   <body>
     <nav>
-      <a href="#" class="logo">Chara</a>
+      <a href="index.html" class="logo">Chara</a>
+      <div class="nav-links">
+        <a href="index.html" class="active">데스크톱 앱</a>
+        <a href="premiere-extension.html">확장프로그램</a>
       </div>
-      <a href="https://tangy-winter-e1a.notion.site/37e429daaae780929f1dc7de0010bbd6?source=copy_link" target="_blank" class="nav-cta">무료로 시작하기</a>
+      <button class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="active">데스크톱 앱</a>
+      <a href="premiere-extension.html">프리미어프로 확장프로그램</a>
+      <a href="guide.html">데스크톱 앱 사용방법</a>
+      <a href="ppro-guide.html">익스텐션 사용방법</a>
+    </div>
 
     <main>
       <!-- Hero -->
       <section class="hero">
-        
-        <h1>8시간 풀영상 <br> 더 이상 안 봐도 됩니다.</h1>
+        <h1>
+          8시간 풀영상 <br />
+          더 이상 안 봐도 됩니다.
+        </h1>
         <p class="hero-sub">
-          전체 영상과 채팅을 이미 다 본 AI와 함께 편집하세요.<br />챗봇과 대화하며 편집 시간을 1/4로 단축시키세요.
+          전체 영상과 채팅을 이미 다 본 AI와 함께 편집하세요.<br />챗봇과
+          대화하며 편집 시간을 1/4로 단축시키세요.
         </p>
         <div class="cta-group">
-          <a href="#" class="btn-primary">지금 바로 시작하기</a>
+          <a href="guide.html" class="btn-primary">지금 바로 시작하기</a>
           <a href="#how" class="btn-secondary">작동 방식 알아보기</a>
         </div>
       </section>
@@ -1365,7 +1532,11 @@
       <div id="how" class="hero-showcase-section">
         <div class="hero-showcase-box">
           <div class="hero-screenshot-inner">
-            <img src="UI.png" alt="Chara UI 화면" style="width:100%;display:block;" />
+            <img
+              src="UI.png"
+              alt="Chara UI 화면"
+              style="width: 100%; display: block"
+            />
           </div>
           <div class="hero-showcase-steps">
             <div class="step-item">
@@ -1401,7 +1572,14 @@
         <!-- Row 1: AI 챗봇 -->
         <div class="feature-row">
           <div class="feature-row-image">
-            <video src="챗봇.mp4" autoplay muted loop playsinline style="width:100%;display:block;"></video>
+            <video
+              src="챗봇.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+              style="width: 100%; display: block"
+            ></video>
           </div>
           <div class="feature-row-text">
             <span class="eyebrow">AI 챗봇 분석</span>
@@ -1422,7 +1600,14 @@
         <!-- Row 2: 쇼츠 -->
         <div class="feature-row-stack">
           <div class="feature-row-stack-image">
-            <video src="쇼츠.mp4" autoplay muted loop playsinline style="width:100%;display:block;"></video>
+            <video
+              src="쇼츠.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+              style="width: 100%; display: block"
+            ></video>
           </div>
           <div class="feature-row-stack-text">
             <h2>쇼츠도 간편하게</h2>
@@ -1549,19 +1734,23 @@
           <details class="faq-item">
             <summary>분석된 데이터는 어디에 저장되나요?</summary>
             <p class="faq-answer">
-              영상 파일은 외부 서버에 업로드되지 않고 모든 처리가 내 PC에서 이루어집니다. 분석 결과는 로컬에 저장되며 Chara는 영상 원본 데이터를 수집하거나 보관하지 않아요. 
+              영상 파일은 외부 서버에 업로드되지 않고 모든 처리가 내 PC에서
+              이루어집니다. 분석 결과는 로컬에 저장되며 Chara는 영상 원본
+              데이터를 수집하거나 보관하지 않아요.
             </p>
           </details>
           <details class="faq-item">
             <summary>채팅 데이터는 어떻게 가져오나요?</summary>
             <p class="faq-answer">
-              VOD URL을 입력하면 채팅 데이터를 자동으로 불러옵니다. 직접 채팅 파일을 가져오실필요 없어요.
+              VOD URL을 입력하면 채팅 데이터를 자동으로 불러옵니다. 직접 채팅
+              파일을 가져오실필요 없어요.
             </p>
           </details>
           <details class="faq-item">
             <summary>영상 처리 시간은 얼마나 걸리나요?</summary>
             <p class="faq-answer">
-              8시간짜리 영상 기준 평균 10~15분 내외입니다. 처리 중에는 다른 작업을 하셔도 되고, 완료되면 알림을 보내드려요.
+              8시간짜리 영상 기준 평균 10~15분 내외입니다. 처리 중에는 다른
+              작업을 하셔도 되고, 완료되면 알림을 보내드려요.
             </p>
           </details>
         </div>
@@ -1571,7 +1760,13 @@
       <section class="cta-banner">
         <div class="cta-banner-inner">
           <h2>지금 바로 무료로 시작하세요</h2>
-          <a href="https://tangy-winter-e1a.notion.site/37e429daaae780929f1dc7de0010bbd6?source=copy_link" target="_blank" class="btn-white">무료로 시작하기 →</a>
+          <p>프리미어 프로 안에서도 똑같이 쓸 수 있습니다.</p>
+          <div class="cta-buttons">
+            <a href="guide.html" class="btn-white">무료로 시작하기 →</a>
+            <a href="premiere-extension.html" class="btn-outline-white"
+              >확장프로그램 알아보기 →</a
+            >
+          </div>
         </div>
       </section>
     </main>
@@ -1603,6 +1798,16 @@
                 <dt>사업장주소</dt>
                 <dd>인천광역시 남동구 만수로 120 2층</dd>
               </div>
+              <div>
+                <dt>이메일</dt>
+                <dd>
+                  <a
+                    href="mailto:biz@chara-edit.com"
+                    style="color: inherit; text-decoration: none"
+                    >biz@chara-edit.com</a
+                  >
+                </dd>
+              </div>
             </dl>
           </div>
           <div class="footer-nav">
@@ -1612,7 +1817,7 @@
             >
             <div class="footer-icons">
               <a
-                href="mailto:chara.kr.official@gmail.com"
+                href="mailto:biz@chara-edit.com"
                 class="footer-icon-btn"
                 aria-label="이메일 문의"
               >
@@ -1637,5 +1842,11 @@
         </p>
       </div>
     </footer>
+    <script>
+      function toggleMenu() {
+        document.querySelector('.menu-toggle').classList.toggle('active');
+        document.getElementById('mobileMenu').classList.toggle('active');
+      }
+    </script>
   </body>
 </html>
