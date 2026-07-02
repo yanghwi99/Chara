@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>Chara — 프리미어프로 익스텐션 사용방법</title>
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --secondary: #0ea5e9;
+        --bg-color: #ffffff;
+        --surface: #ffffff;
+        --surface-2: #f0f7ff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        html {
+          background: #ffffff;
+          color: #0f172a;
+        }
+      }
+
+      body {
+        font-family:
+          'Pretendard',
+          -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          'Noto Sans KR',
+          sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        line-height: 1.6;
+        overflow-x: hidden;
+        word-break: keep-all;
+      }
+
+      /* ── Navbar ── */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 64px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 5%;
+        z-index: 1000;
+      }
+
+      .logo {
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: color 0.2s;
+        white-space: nowrap;
+      }
+
+      @media (max-width: 480px) {
+        .nav-links {
+          gap: 0.6rem;
+        }
+        .nav-links a {
+          font-size: 0.78rem;
+        }
+        .logo {
+          font-size: 1.1rem;
+        }
+      }
+
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .nav-links a.active {
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        position: relative;
+        z-index: 1001;
+      }
+      .menu-toggle span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--text-main);
+        margin: 5px 0;
+        border-radius: 2px;
+        transition:
+          transform 0.3s,
+          opacity 0.3s;
+      }
+      .menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+      }
+      .menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 5%;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 999;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+      .mobile-menu.active {
+        display: flex;
+      }
+      .mobile-menu a {
+        text-decoration: none;
+        color: var(--text-muted);
+        font-size: 1rem;
+        font-weight: 500;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border-color);
+        transition: color 0.2s;
+      }
+      .mobile-menu a:last-child {
+        border-bottom: none;
+      }
+      .mobile-menu a:hover,
+      .mobile-menu a.active {
+        color: var(--primary);
+      }
+
+      .nav-cta {
+        background: var(--primary);
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+
+      .nav-cta:hover {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+      }
+
+      /* ── Hero ── */
+      .hero {
+        padding: 140px 5% 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 1rem;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        margin-bottom: 1.75rem;
+        border: 1px solid rgba(37, 99, 235, 0.18);
+        letter-spacing: 0.02em;
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 4.5vw, 3.2rem);
+        font-weight: 800;
+        line-height: 1.2;
+        letter-spacing: -0.04em;
+        margin-bottom: 1rem;
+        color: var(--text-main);
+      }
+
+      .hero h1 span {
+        background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero-sub {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 540px;
+        margin-bottom: 2rem;
+        line-height: 1.75;
+      }
+
+      /* ── Guide Sections ── */
+      .guide-sections {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 5% 4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+      }
+
+      .guide-section {
+        scroll-margin-top: 80px;
+      }
+
+      .guide-section-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--border-color);
+      }
+
+      .guide-section-num {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), #0284c7);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        font-weight: 800;
+        flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      }
+
+      .guide-section-header h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--text-main);
+      }
+
+      .guide-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .guide-content p {
+        font-size: 1rem;
+        color: var(--text-main);
+        line-height: 1.8;
+      }
+
+      .guide-content .link-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: var(--surface-2);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+        word-break: break-all;
+      }
+
+      .guide-content .link-box:hover {
+        border-color: var(--primary);
+        transform: translateY(-1px);
+      }
+
+      .guide-img {
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        background: #fafafa;
+      }
+
+      .guide-img img {
+        width: 100%;
+        display: block;
+      }
+
+      .guide-img.small {
+        max-width: 140px;
+      }
+
+      .guide-img.medium {
+        max-width: 520px;
+      }
+
+      .guide-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        counter-reset: guide-step;
+      }
+
+      .guide-steps li {
+        counter-increment: guide-step;
+        display: flex;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        background: var(--surface-2);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        font-size: 0.95rem;
+        line-height: 1.75;
+        color: var(--text-main);
+      }
+
+      .guide-steps li::before {
+        content: counter(guide-step);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 0.1rem;
+      }
+
+      .guide-steps li .step-content {
+        flex: 1;
+      }
+
+      .guide-steps li strong {
+        color: var(--text-main);
+        font-weight: 700;
+      }
+
+      .tip-box {
+        padding: 1rem 1.25rem;
+        background: rgba(37, 99, 235, 0.06);
+        border: 1px solid rgba(37, 99, 235, 0.15);
+        border-radius: 12px;
+        color: var(--text-main);
+        font-size: 0.9rem;
+        line-height: 1.75;
+      }
+
+      .tip-box strong {
+        color: var(--primary);
+      }
+
+      /* ── Contact Banner ── */
+      .contact-banner {
+        padding: 4rem 5%;
+      }
+
+      .contact-banner-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+        border-radius: 24px;
+        padding: 3.5rem 3rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .contact-banner-inner::before {
+        content: '';
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+        pointer-events: none;
+      }
+
+      .contact-banner h2 {
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.03em;
+        position: relative;
+        z-index: 1;
+      }
+
+      .contact-banner p {
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+        line-height: 1.7;
+      }
+
+      .contact-links {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+      }
+
+      .btn-white {
+        display: inline-block;
+        background: #fff;
+        color: var(--primary);
+        padding: 0.75rem 1.75rem;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 800;
+        text-decoration: none;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-white:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-outline-white {
+        display: inline-block;
+        background: transparent;
+        color: #fff;
+        padding: 0.75rem 1.75rem;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-decoration: none;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        transition:
+          transform 0.2s,
+          border-color 0.2s;
+      }
+
+      .btn-outline-white:hover {
+        transform: translateY(-2px);
+        border-color: #fff;
+      }
+
+      /* ── Footer ── */
+      footer {
+        background: #f9fafb;
+        border-top: 1px solid var(--border-color);
+        padding: 2.5rem 5%;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .footer-logo {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--primary);
+        line-height: 1;
+      }
+
+      .footer-logo-sub {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        opacity: 0.6;
+      }
+
+      .footer-body {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1.5rem;
+        align-items: start;
+        margin-bottom: 1.25rem;
+      }
+
+      .footer-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+
+      .footer-info dl {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.15rem 1.25rem;
+        margin: 0;
+      }
+
+      .footer-info dl div {
+        display: flex;
+        align-items: baseline;
+        gap: 0.3rem;
+        white-space: nowrap;
+      }
+
+      .footer-info dt {
+        font-weight: 600;
+        opacity: 0.45;
+      }
+      .footer-info dd {
+        opacity: 0.7;
+        margin: 0;
+      }
+
+      .footer-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        align-items: flex-end;
+      }
+
+      .footer-nav a {
+        color: var(--text-muted);
+        text-decoration: none;
+        opacity: 0.7;
+        transition: opacity 0.15s;
+      }
+
+      .footer-nav a:hover {
+        opacity: 1;
+        text-decoration: underline;
+      }
+
+      .footer-icons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        justify-content: flex-end;
+      }
+
+      .footer-icon-btn {
+        display: inline-flex;
+        width: 2rem;
+        height: 2rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 1px solid var(--border-color);
+        background: #fff;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition:
+          border-color 0.15s,
+          color 0.15s;
+      }
+
+      .footer-icon-btn:hover {
+        border-color: #aaa;
+        color: var(--text-main);
+      }
+      .footer-icon-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .footer-divider {
+        border: none;
+        border-top: 1px solid var(--border-color);
+        margin: 0 0 1rem;
+      }
+
+      .footer-copyright {
+        opacity: 0.4;
+        margin: 0;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        .hero {
+          padding: 100px 5% 40px;
+        }
+        .guide-section-header h2 {
+          font-size: 1.25rem;
+        }
+        .footer-body {
+          grid-template-columns: 1fr;
+        }
+        .footer-nav {
+          align-items: flex-start;
+        }
+        .footer-icons {
+          justify-content: flex-start;
+        }
+        .contact-banner-inner {
+          padding: 2.5rem 1.5rem;
+        }
+        .contact-links {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .btn-white,
+        .btn-outline-white {
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero {
+          padding: 90px 5% 30px;
+        }
+      }
+    </style>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1539584674459653');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1539584674459653&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="logo">Chara</a>
+      <div class="nav-links">
+        <a href="index.html">데스크톱 앱</a>
+        <a href="premiere-extension.html">프리미어프로 확장프로그램</a>
+      </div>
+      <button class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">데스크톱 앱</a>
+      <a href="premiere-extension.html">프리미어프로 확장프로그램</a>
+      <a href="guide.html">데스크톱 앱 사용방법</a>
+      <a href="ppro-guide.html" class="active">익스텐션 사용방법</a>
+    </div>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero">
+        <h1><span>프리미어프로 익스텐션</span><br />사용방법</h1>
+        <p class="hero-sub">
+          프리미어 프로 안에서 바로 AI 편집 기능을 사용하세요.<br />
+          설치부터 이용까지 단계별로 안내합니다.
+        </p>
+      </section>
+
+      <!-- Guide Sections -->
+      <div class="guide-sections">
+        <!-- 1. 다운로드 및 설치 -->
+        <section id="install" class="guide-section">
+          <div class="guide-section-header">
+            <div class="guide-section-num">01</div>
+            <h2>다운로드 및 설치</h2>
+          </div>
+          <div class="guide-content">
+            <p>이메일에서 발송드린 링크를 타고 들어가 설치합니다.</p>
+            <ol class="guide-steps">
+              <li>
+                <div class="step-content">
+                  <strong>CharaEdit-Windows.zip</strong> 압축 풀기<br />
+                  바탕화면 등 아무 곳에 풀어주세요.
+                </div>
+              </li>
+              <li>
+                <div class="step-content">
+                  폴더 안 <strong>install.bat</strong> 더블클릭<br />
+                  검은 창이 뜨고 끝나면 아무 키를 눌러주세요.
+                </div>
+              </li>
+              <li>
+                <div class="step-content">
+                  <strong>Premiere Pro 완전히 껐다 다시 켜기</strong>
+                </div>
+              </li>
+              <li>
+                <div class="step-content">
+                  <strong>프로젝트 생성</strong> (새 프로젝트 또는 기존
+                  프로젝트)
+                </div>
+              </li>
+              <li>
+                <div class="step-content">
+                  상단 메뉴
+                  <strong>창(W) &rarr; 확장명 &rarr; CharaEdit</strong>
+                  클릭<br />
+                  또는
+                  <strong>Window &rarr; Extensions &rarr; CharaEdit</strong>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- 2. 회원가입 -->
+        <section id="signup" class="guide-section">
+          <div class="guide-section-header">
+            <div class="guide-section-num">02</div>
+            <h2>회원가입</h2>
+          </div>
+          <div class="guide-content">
+            <p>
+              CharaEdit 패널이 열리면 원하는 이메일과 아이디로 회원가입을
+              진행합니다.
+            </p>
+            <div class="guide-img medium">
+              <img
+                src="프리미어프로 익스텐션 사용방법/image.png"
+                alt="회원가입 화면"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. 분석 시작 -->
+        <section id="analyze" class="guide-section">
+          <div class="guide-section-header">
+            <div class="guide-section-num">03</div>
+            <h2>분석 시작</h2>
+          </div>
+          <div class="guide-content">
+            <ol class="guide-steps">
+              <li>
+                <div class="step-content">
+                  <strong>원본 영상</strong>을 프리미어 프로에 미디어로 추가
+                </div>
+              </li>
+              <li>
+                <div class="step-content">
+                  <strong>생방송 다시보기 URL 입력</strong><br />
+                  해당 원본 영상의 VOD URL을 입력합니다.<br />
+                  CHZZK, SOOP, YouTube Live를 지원합니다.
+                </div>
+              </li>
+              <li>
+                <div class="step-content">
+                  <strong>편집 의도 선택</strong><br />
+                  &middot; 흐름 살리기: 큰 부분의 내용을 요약<br />
+                  &middot; 하이라이트 추출: 1분 이내의 재밌는 내용을 요약
+                </div>
+              </li>
+            </ol>
+            <div class="tip-box">
+              <strong>지원 플랫폼:</strong> CHZZK, SOOP, YouTube Live의 다시보기
+              URL을 입력하면 채팅 데이터를 자동으로 불러옵니다.
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. AI 챗봇 -->
+        <section id="chatbot" class="guide-section">
+          <div class="guide-section-header">
+            <div class="guide-section-num">04</div>
+            <h2>AI 챗봇</h2>
+          </div>
+          <div class="guide-content">
+            <p>
+              AI 에이전트 채팅을 통해 원하는 부분을 찾아가세요. 분석이 완료되면
+              챗봇에게 자유롭게 질문하고 편집 지시를 내릴 수 있습니다.
+            </p>
+            <div class="tip-box">
+              <strong>이런 것들을 물어보세요:</strong><br />
+              &middot; "어디가 제일 재밌어?"<br />
+              &middot; "시청자가 가장 많이 반응한 구간은?"<br />
+              &middot; "사주 상담 부분만 잘라줘"<br />
+              &middot; "8:12:20 - 8:15:50분 분할해줘"
+            </div>
+            <div class="tip-box">
+              <strong>편집 적용:</strong> 챗봇이 제안한 컷을
+              <strong>[적용]</strong> 버튼을 눌러 타임라인에 바로 반영할 수
+              있습니다.
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Contact Banner -->
+      <section class="contact-banner">
+        <div class="contact-banner-inner">
+          <h2>문의사항이 있으신가요?</h2>
+          <p>이메일이나 디스코드로 연락 주시면 빠르게 답변 드리겠습니다.</p>
+          <div class="contact-links">
+            <a href="mailto:biz@chara-edit.com" class="btn-white"
+              >biz@chara-edit.com</a
+            >
+            <a
+              href="https://discord.gg/49ex7w22Z"
+              target="_blank"
+              class="btn-outline-white"
+              >Discord 채널 &rarr;</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">Chara</span>
+          <span class="footer-logo-sub">AI 하이라이트 편집 솔루션</span>
+        </div>
+        <div class="footer-body">
+          <div class="footer-info">
+            <dl>
+              <div>
+                <dt>상호명</dt>
+                <dd>(주) 차라</dd>
+              </div>
+              <div>
+                <dt>대표자</dt>
+                <dd>양휘찬</dd>
+              </div>
+              <div>
+                <dt>사업자등록번호</dt>
+                <dd>823-81-03995</dd>
+              </div>
+            </dl>
+            <dl>
+              <div>
+                <dt>사업장주소</dt>
+                <dd>인천광역시 남동구 만수로 120 2층</dd>
+              </div>
+              <div>
+                <dt>이메일</dt>
+                <dd>
+                  <a
+                    href="mailto:biz@chara-edit.com"
+                    style="color: inherit; text-decoration: none"
+                    >biz@chara-edit.com</a
+                  >
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <div class="footer-nav">
+            <a href="#">이용약관</a>
+            <a href="#" style="font-weight: 600; opacity: 0.85"
+              >개인정보 처리방침</a
+            >
+            <div class="footer-icons">
+              <a
+                href="mailto:biz@chara-edit.com"
+                class="footer-icon-btn"
+                aria-label="이메일 문의"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <hr class="footer-divider" />
+        <p class="footer-copyright">
+          Copyright &copy; 2026 Chara. All rights reserved.
+        </p>
+      </div>
+    </footer>
+    <script>
+      function toggleMenu() {
+        document.querySelector('.menu-toggle').classList.toggle('active');
+        document.getElementById('mobileMenu').classList.toggle('active');
+      }
+    </script>
+  </body>
+</html>
